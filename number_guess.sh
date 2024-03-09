@@ -17,7 +17,7 @@ LOGIN() {
   else
     echo "$USER_EXIST_RESULT" | while IFS='|' read -r DB_USERNAME GAMES_PLAYED CURRENT_BEST_GAME
      do
-      echo -e "\nWelcome back, $DB_USERNAME! You have played $GAMES_PLAYED games, and your best game took $CURRENT_BEST_GAME guesses.\n" 1> debug.sh
+      echo -e "\nWelcome back, $DB_USERNAME! You have played $GAMES_PLAYED games, and your best game took $CURRENT_BEST_GAME guesses.\n"
       BEST_GAME=$CURRENT_BEST_GAME
     done
     GAME
@@ -42,21 +42,26 @@ GAME() {
   echo -e "\nGuess the secret number between 1 and 1000:"
   read USERS_GUESS
 
-  while [[ ! $USERS_GUESS =~ ^[0-9]+$ ]]; do
+  while [[ ! $USERS_GUESS =~ ^[0-9]+$ ]]
+  do
     echo "That is not an integer, guess again:"
     read USERS_GUESS
   done
 
-  while [ $USERS_GUESS -ne $RANDOM_NUMBER ]; do
-    if [[ $RANDOM_NUMBER -lt $USERS_GUESS ]]; then
+  while [ $USERS_GUESS -ne $RANDOM_NUMBER ] 
+  do
+    if [[ $RANDOM_NUMBER -lt $USERS_GUESS ]] 
+      then
       echo -e "\nIt's lower than that, guess again:"
-    elif [[ $RANDOM_NUMBER -gt $USERS_GUESS ]]; then
+    elif [[ $RANDOM_NUMBER -gt $USERS_GUESS ]] 
+      then
       echo -e "\nIt's higher than that, guess again:"
     fi
     
     read USERS_GUESS
     
-    while [[ ! $USERS_GUESS =~ ^[0-9]+$ ]]; do
+    while [[ ! $USERS_GUESS =~ ^[0-9]+$ ]] 
+    do
       echo "That is not an integer, guess again:"
       read USERS_GUESS
     done
@@ -64,10 +69,12 @@ GAME() {
     ((USERS_GUESS_COUNT++))
   done
 
-  if [[ $USERS_GUESS_COUNT -lt $BEST_GAME ]]; then
+  if [[ $USERS_GUESS_COUNT -lt $BEST_GAME ]] 
+  then
     INSERT_NEW_BEST=$($PSQL "UPDATE users SET best_game = $USERS_GUESS_COUNT WHERE username='$USERNAME';")
     
-    if [[ $INSERT_NEW_BEST == "UPDATE 1" ]]; then
+    if [[ $INSERT_NEW_BEST == "UPDATE 1" ]] 
+    then
       echo -e "\nBest game has been updated\n"
     else
       echo -e "\nBest game could not be updated\n"
